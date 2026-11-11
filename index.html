@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Birthday Surprise 💖</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, #ffe0ec, #f8c8dc, #e9d5ff);
+        overflow: hidden;
+        padding: 18px;
+      }
+      .heart {
+        position: fixed;
+        color: #ff6b9d;
+        opacity: 0.5;
+        pointer-events: none;
+        animation: float 7s linear infinite;
+        z-index: 0;
+      }
+      @keyframes float {
+        from {
+          transform: translateY(105vh) rotate(0);
+        }
+        to {
+          transform: translateY(-100px) rotate(360deg);
+        }
+      }
+      .card {
+        width: 100%;
+        max-width: 430px;
+        min-height: 510px;
+        background: rgba(255, 255, 255, 0.93);
+        border-radius: 30px;
+        padding: 30px 22px;
+        text-align: center;
+        box-shadow: 0 15px 40px #c8508240;
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .page {
+        width: 100%;
+        animation: appear 0.65s ease;
+      }
+      @keyframes appear {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .hidden {
+        display: none !important;
+      }
+      h1 {
+        color: #e75480;
+        font-size: 28px;
+        margin: 12px 0;
+      }
+      p {
+        color: #8b5269;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+      .cake-emoji {
+        font-size: 72px;
+        margin-bottom: 12px;
+        animation: bounce 2s infinite;
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-9px);
+        }
+      }
+      button {
+        margin-top: 24px;
+        padding: 13px 27px;
+        border: 0;
+        border-radius: 50px;
+        background: linear-gradient(135deg, #ff6b9d, #e75480);
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 5px 15px #f3a4c1;
+        transition: 0.25s;
+      }
+      button:hover {
+        transform: scale(1.05);
+      }
+      .next-btn {
+        background: linear-gradient(135deg, #b57bee, #8b5cf6);
+        box-shadow: 0 5px 15px #d3b5f5;
+      }
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 24px;
+      }
+      .buttons button {
+        margin-top: 0;
+        min-width: 100px;
+      }
+      #noBtn {
+        background: #b9a5b1;
+        box-shadow: none;
+      }
+      .balloon-area {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px 8px;
+        margin: 23px auto 10px;
+        max-width: 300px;
+      }
+      .balloon {
+        font-size: 53px;
+        cursor: pointer;
+        user-select: none;
+        transition: transform 0.2s;
+        animation: balloonFloat 2s infinite ease-in-out;
+      }
+      .balloon:nth-child(even) {
+        animation-delay: 0.5s;
+      }
+      @keyframes balloonFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+      .balloon.popped {
+        animation: pop 0.3s forwards;
+        pointer-events: none;
+      }
+      @keyframes pop {
+        to {
+          transform: scale(0);
+          opacity: 0;
+        }
+      }
+      .score {
+        color: #d63384;
+        font-weight: bold;
+        font-size: 17px;
+        margin-top: 10px;
+      }
+      #balloonMessage {
+        min-height: 28px;
+        margin-top: 10px;
+        color: #d63384;
+        font-weight: bold;
+      }
+      .birthday-cake {
+        width: 220px;
+        margin: 55px auto 25px;
+        position: relative;
+        height: 150px;
+      }
+      .cake-bottom {
+        width: 220px;
+        height: 65px;
+        background: linear-gradient(#ff8fab, #f06595);
+        border-radius: 10px 10px 15px 15px;
+        position: absolute;
+        bottom: 0;
+      }
+      .cake-middle {
+        width: 190px;
+        height: 45px;
+        background: #ffc2d1;
+        border-radius: 10px 10px 5px 5px;
+        position: absolute;
+        bottom: 65px;
+        left: 15px;
+      }
+      .cake-top {
+        width: 160px;
+        height: 35px;
+        background: #fff0f5;
+        border-radius: 50% 50% 10px 10px;
+        position: absolute;
+        bottom: 110px;
+        left: 30px;
+      }
+      .candles {
+        position: absolute;
+        bottom: 140px;
+        left: 65px;
+        display: flex;
+        gap: 20px;
+        z-index: 2;
+      }
+      .candle {
+        width: 12px;
+        height: 40px;
+        background: linear-gradient(to right, #fff, #ffb3c6);
+        border-radius: 4px;
+        position: relative;
+      }
+      .flame {
+        width: 15px;
+        height: 22px;
+        background: #ffb703;
+        border-radius: 50% 50% 50% 0;
+        position: absolute;
+        top: -23px;
+        left: -2px;
+        transform: rotate(-45deg);
+        box-shadow: 0 0 15px #ffb703;
+        animation: flicker 0.5s infinite alternate;
+      }
+      @keyframes flicker {
+        to {
+          transform: rotate(-40deg) scale(0.85);
+        }
+      }
+      .candles.blown .flame {
+        display: none;
+      }
+      .cake-message {
+        color: #d63384;
+        font-weight: bold;
+        min-height: 28px;
+      }
+      .envelope {
+        width: 210px;
+        height: 135px;
+        margin: 35px auto 15px;
+        position: relative;
+        background: #f7a9c4;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 8px 20px #d77b9b55;
+      }
+      .envelope:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: #fbd0df;
+        clip-path: polygon(0 0, 50% 58%, 100% 0);
+        z-index: 2;
+        transition: transform 0.5s;
+        transform-origin: top;
+      }
+      .envelope.open:before {
+        transform: rotateX(180deg);
+      }
+      .envelope:after {
+        content: "💌";
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-size: 38px;
+      }
+      .letter {
+        background: #fff8fb;
+        border: 1px solid #f6c5d7;
+        border-radius: 16px;
+        padding: 18px;
+        text-align: left;
+        margin-top: 18px;
+        color: #8b5269;
+        line-height: 1.7;
+        animation: appear 0.7s ease;
+      }
+      @media (max-width: 380px) {
+        .card {
+          padding: 24px 16px;
+          min-height: 490px;
+        }
+        h1 {
+          font-size: 25px;
+        }
+      }
+
+      
+/* BIRTHDAY GIRL PHOTO GALLERY */
+
+.gallery-title {
+  color: #e75480;
+  font-size: 27px;
+  margin-bottom: 8px;
+}
+
+.gallery-subtitle {
+  color: #9b6078;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 13px;
+  margin: 20px auto;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.photo-frame {
+  background: white;
+  padding: 7px 7px 12px;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px #c8508240;
+  transform: rotate(var(--tilt));
+  transition: 0.35s ease;
+  animation: photoAppear 0.8s ease both;
+}
+
+.photo-frame:hover {
+  transform: scale(1.07) rotate(0deg);
+  box-shadow: 0 12px 25px #c8508260;
+  z-index: 2;
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 125px;
+  object-fit: cover;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.photo-caption {
+  font-family: Georgia, serif;
+  color: #d63384;
+  font-size: 12px;
+  margin-top: 7px;
+}
+
+@keyframes photoAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px) rotate(var(--tilt));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--tilt));
+  }
+}
+
+/* Full screen photo */
+
+.photo-viewer {
+  position: fixed;
+  inset: 0;
+  background: #250b1dcc;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  padding: 20px;
+}
+
+.photo-viewer.active {
+  display: flex;
+}
+
+.photo-viewer img {
+  max-width: 95%;
+  max-height: 85vh;
+  object-fit: contain;
+  border: 7px solid white;
+  border-radius: 8px;
+}
+
+.photo-close {
+  position: absolute;
+  top: 15px;
+  right: 22px;
+  color: white;
+  font-size: 35px;
+  background: transparent;
+  box-shadow: none;
+  margin: 0;
+  padding: 5px 12px;
+}
+
+@media (max-width: 380px) {
+  .photo-frame img {
+    height: 105px;
+  }
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="hearts"></div>
+    <main class="card">
+      <section id="opening" class="page">
+        <div class="cake-emoji">🎂</div>
+        <h1>Hey Birthday Girl!</h1>
+        <p>Someone has prepared<br />something special for you...</p>
+        <p style="margin-top: 15px">
+          A little surprise filled with<br />love, happiness and memories 💗
+        </p>
+        <button onclick="showPage('greeting')">Tap to Open 💌</button>
+      </section>
+
+      <section id="greeting" class="page hidden">
+        <div class="cake-emoji">🎉</div>
+        <h1>Happy Birthday!</h1>
+        <p>
+          Today is all about you,<br />your beautiful smile and<br />all the
+          happiness you deserve.
+        </p>
+        <p style="margin-top: 20px">
+          Get ready for your little<br />birthday adventure! 💖
+        </p>
+        <button class="next-btn" onclick="showPage('question')">
+          Let's Begin ✨
+        </button>
+      </section>
+
+      <section id="question" class="page hidden">
+        <div class="cake-emoji">🥹</div>
+        <h1>One Little Question!</h1>
+        <p>Are you ready for<br />your special birthday surprise?</p>
+        <div class="buttons">
+          <button onclick="sayYes()">Yes! 💖</button
+          ><button id="noBtn" onclick="sayNo()">No 🙈</button>
+        </div>
+        <p id="noMessage" style="margin-top: 20px"></p>
+      </section>
+
+      <section id="yesResponse" class="page hidden">
+        <div class="cake-emoji">🥳💖</div>
+        <h1>Yayyy!</h1>
+        <p>I knew you would say YES! 😍</p>
+        <p style="margin-top: 15px">
+          Your birthday adventure<br />is just getting started...
+        </p>
+        <button class="next-btn" onclick="showPage('balloonGame')">
+          Next Surprise 🎁
+        </button>
+      </section>
+
+      <section id="balloonGame" class="page hidden">
+        <div class="cake-emoji">🎈</div>
+        <h1>Pop the Balloons!</h1>
+        <p>Pop all the balloons<br />to unlock your next surprise!</p>
+        <div class="score">Balloons: <span id="score">0</span> / 6</div>
+        <div class="balloon-area">
+          <div class="balloon" onclick="popBalloon(this)">🎈</div>
+          <div class="balloon" onclick="popBalloon(this)">🎈</div>
+          <div class="balloon" onclick="popBalloon(this)">🎈</div>
+          <div class="balloon" onclick="popBalloon(this)">🎈</div>
+          <div class="balloon" onclick="popBalloon(this)">🎈</div>
+          <div class="balloon" onclick="popBalloon(this)">🎈</div>
+        </div>
+        <p id="balloonMessage">Tap a balloon to pop it! 💕</p>
+        <button
+          id="balloonNext"
+          class="next-btn hidden"
+          onclick="showPage('cakePage')"
+        >
+          Next Surprise 🎁
+        </button>
+      </section>
+
+      <section id="cakePage" class="page hidden">
+        <div class="cake-emoji">🎂</div>
+        <h1>Make a Wish!</h1>
+        <p>Close your eyes, make a wish<br />and blow out your candles! 💖</p>
+        <div class="birthday-cake">
+          <div class="candles">
+            <div class="candle"><div class="flame"></div></div>
+            <div class="candle"><div class="flame"></div></div>
+            <div class="candle"><div class="flame"></div></div>
+          </div>
+          <div class="cake-top"></div>
+          <div class="cake-middle"></div>
+          <div class="cake-bottom"></div>
+        </div>
+        <p id="cakeMessage" class="cake-message">
+          Your wish is waiting to come true ✨
+        </p>
+        <button id="blowBtn" onclick="blowCandles()">Blow Candles 🕯️</button>
+        <button
+          id="cakeNextBtn"
+          class="next-btn hidden"
+          onclick="showPage('galleryPage')"
+        >
+          Open Your Letter 💌
+        </button>
+      </section>
+
+
+
+<section id="galleryPage" class="page hidden">
+
+  <div class="cake-emoji">📸</div>
+
+  <h1 class="gallery-title">Her Beautiful Memories</h1>
+
+  <p class="gallery-subtitle">
+    Every picture tells a beautiful story 💗
+  </p>
+
+  <div class="photo-gallery" id="photoGallery"></div>
+
+  <p style="font-size: 13px;">
+    Some memories are forever special ✨
+  </p>
+
+  <button
+    class="next-btn"
+    onclick="showPage('letterPage')"
+  >
+    Open Your Letter 💌
+  </button>
+
+</section>
+
+<!-- Full screen photo viewer -->
+
+<div class="photo-viewer" id="photoViewer"
+     onclick="closePhoto()">
+
+  <button class="photo-close"
+          onclick="closePhoto()">
+    ×
+  </button>
+
+  <img id="largePhoto" src="" alt="Birthday memory">
+
+</div>
+
+
+      <section id="letterPage" class="page hidden">
+        <div class="cake-emoji">💌</div>
+        <h1>A Letter For You</h1>
+        <p>A little note, written just for you...</p>
+        <div
+          id="envelope"
+          class="envelope"
+          onclick="openLetter()"
+          aria-label="Open birthday letter"
+        ></div>
+        <p id="envelopeHint">Tap the envelope to open it 💗</p>
+        <div id="letterText" class="letter hidden">
+          <strong>To the Birthday Girl,</strong><br /><br />
+          <b>Happy Birthday Nimerta ji(Nimu ji)</b><br />
+          Wishing you a day filled with smiles, laughter and beautiful memories.
+          May this new year of your life bring you endless happiness, love and
+          wonderful surprises.<br /><br />
+          Never stop shining and always keep smiling. You deserve all the lovely
+          things life has to offer! 💖<br /><br />
+          <strong>With lots of love,</strong><br />
+          Dhan Nirankar ji<br />
+          Your Secret Birthday Planner
+          ✨
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const pageIds = [
+  "opening",
+  "greeting",
+  "question",
+  "yesResponse",
+  "balloonGame",
+  "cakePage",
+  "galleryPage",
+  "letterPage",
+];
+      function showPage(id) {
+        pageIds.forEach((page) =>
+          document.getElementById(page).classList.toggle("hidden", page !== id),
+        );
+      }
+      const hearts = document.getElementById("hearts");
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "♥";
+        heart.style.left = Math.random() * 100 + "%";
+        heart.style.fontSize = 15 + Math.random() * 25 + "px";
+        heart.style.animationDuration = 4 + Math.random() * 6 + "s";
+        heart.style.animationDelay = Math.random() * 5 + "s";
+        hearts.appendChild(heart);
+      }
+      function sayNo() {
+        const messages = [
+          "Are you sure? 🥺",
+          "Please say YES! 💗",
+          "ki aa v ! 😭",
+          "One more chance? 🙈",
+          "Nime oye ? 🥹",
+        ];
+        document.getElementById("noMessage").textContent =
+          messages[Math.floor(Math.random() * messages.length)];
+        const b = document.getElementById("noBtn");
+        b.style.transform = `translate(${Math.random() * 100 - 50}px,${Math.random() * 60 - 30}px)`;
+      }
+      function sayYes() {
+        showPage("yesResponse");
+      }
+      let poppedCount = 0;
+      const balloonMessages = [
+        "One little wish for you! 💖",
+        "You deserve all the happiness! 🌸",
+        "Keep smiling, birthday girl! 😊",
+        "Sending you lots of love! 💕",
+        "You are truly special! ✨",
+        "Your birthday magic is here! 🎉",
+      ];
+      function popBalloon(balloon) {
+        if (balloon.classList.contains("popped")) return;
+        balloon.classList.add("popped");
+        poppedCount++;
+        document.getElementById("score").textContent = poppedCount;
+        document.getElementById("balloonMessage").textContent =
+          balloonMessages[poppedCount - 1];
+        if (poppedCount === 6) {
+          document.getElementById("balloonMessage").textContent =
+            "Yayyy! You popped them all! 🎉💖";
+          document.getElementById("balloonNext").classList.remove("hidden");
+          celebrate();
+        }
+      }
+      function celebrate() {
+        for (let i = 0; i < 25; i++) {
+          const h = document.createElement("div");
+          h.textContent = "💖";
+          h.style.cssText = `position:fixed;left:${Math.random() * 100}vw;top:-30px;font-size:24px;z-index:5;pointer-events:none`;
+          document.body.appendChild(h);
+          h.animate(
+            [
+              { transform: "translateY(0)", opacity: 1 },
+              { transform: "translateY(105vh)", opacity: 0 },
+            ],
+            { duration: 2500 + Math.random() * 1500, easing: "ease-in" },
+          );
+          setTimeout(() => h.remove(), 4200);
+        }
+      }
+      function blowCandles() {
+        document.querySelector(".candles").classList.add("blown");
+        document.getElementById("cakeMessage").textContent =
+          "Your wish is on its way! 💖✨";
+        document.getElementById("blowBtn").classList.add("hidden");
+        document.getElementById("cakeNextBtn").classList.remove("hidden");
+        celebrate();
+      }
+      function openLetter() {
+        document.getElementById("envelope").classList.add("open");
+        document.getElementById("letterText").classList.remove("hidden");
+        document.getElementById("envelopeHint").textContent =
+          "A little message, just for you 💗";
+      }
+
+      
+/* BIRTHDAY GIRL PHOTOS */
+
+// Yahan apni photos ke names add karna.
+// Photo files images folder ke andar honi chahiye.
+
+const birthdayPhotos = [
+  {
+    src: "image/nimu1.jpg",
+    caption: "Beautiful Smile 💗"
+  },
+  {
+    src: "image/nimu2.jpg",
+    caption: "Special Memories ✨"
+  },
+  {
+    src: "image/nimu3.jpg",
+    caption: "Keep Smiling 🌸"
+  },
+  {
+    src: "image/nimu4.jpg",
+    caption: "Forever Beautiful 💕"
+  },
+  {
+    src: "image/nimu5.jpg",
+    caption: "Our Favourite Moments 🥰"
+  }
+];
+
+function loadBirthdayPhotos() {
+  const gallery = document.getElementById("photoGallery");
+
+  gallery.innerHTML = "";
+
+  birthdayPhotos.forEach((photo, index) => {
+
+    const frame = document.createElement("div");
+    frame.className = "photo-frame";
+
+    frame.style.setProperty(
+      "--tilt",
+      `${index % 2 === 0 ? -2 : 2}deg`
+    );
+
+    const img = document.createElement("img");
+
+    img.src = photo.src;
+    img.alt = "Birthday Girl Memory";
+    img.loading = "lazy";
+
+    img.onclick = function () {
+      openPhoto(photo.src);
+    };
+
+    const caption = document.createElement("div");
+
+    caption.className = "photo-caption";
+    caption.textContent = photo.caption;
+
+    frame.appendChild(img);
+    frame.appendChild(caption);
+
+    gallery.appendChild(frame);
+  });
+}
+
+function openPhoto(src) {
+  document.getElementById("largePhoto").src = src;
+
+  document.getElementById("photoViewer")
+    .classList.add("active");
+}
+
+function closePhoto() {
+  document.getElementById("photoViewer")
+    .classList.remove("active");
+}
+
+// Load photos when website starts
+loadBirthdayPhotos();
+
+    </script>
+  </body>
+</html>
